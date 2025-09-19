@@ -1,6 +1,14 @@
+// Responsive version of SpinningWheel page
+// Key changes:
+// - Uses responsive breakpoints for typography, paddings, and layout.
+// - Cards and wheel resize based on viewport width.
+// - Buttons wrap and stretch nicely on small screens.
+// - Decorative icons hidden on small screens.
+// - Consistent spacing & sticky sidebars for large screens.
+
 "use client";
 import React, { useState, useRef } from "react";
-import { Plus, RotateCcw, Sparkles, Stars, Zap, Trophy } from "lucide-react";
+import { Plus, RotateCcw, Sparkles, Stars, Zap } from "lucide-react";
 import { Josefin_Sans } from "next/font/google";
 
 const josefin = Josefin_Sans({
@@ -53,15 +61,12 @@ export default function SpinningWheel() {
 
   const spinWheel = () => {
     if (isSpinning || availableOptions.length === 0) return;
-
     setIsSpinning(true);
     setCurrentResult(null);
 
     const randomIndex = Math.floor(Math.random() * availableOptions.length);
     const segmentAngle = 360 / availableOptions.length;
-    const targetAngle =
-      360 - (randomIndex * segmentAngle + segmentAngle / 2);
-
+    const targetAngle = 360 - (randomIndex * segmentAngle + segmentAngle / 2);
     const spins = Math.floor(Math.random() * 5) + 4;
     const finalRotation = rotation + spins * 360 + targetAngle;
 
@@ -86,7 +91,7 @@ export default function SpinningWheel() {
       <div className="relative">
         <div
           ref={wheelRef}
-          className="relative w-80 h-80 rounded-full overflow-hidden shadow-2xl"
+          className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl"
           style={{
             transform: `rotate(${rotation}deg)`,
             transition: isSpinning
@@ -102,18 +107,16 @@ export default function SpinningWheel() {
                 key={i}
                 className={`absolute w-full h-full bg-gradient-to-r ${colors[color]} flex items-center justify-center`}
                 style={{
-                  clipPath: `polygon(50% 50%, 
-                    ${50 + 50 * Math.cos((start - 90) * Math.PI / 180)}% 
-                    ${50 + 50 * Math.sin((start - 90) * Math.PI / 180)}%, 
-                    ${50 + 50 * Math.cos((start + seg - 90) * Math.PI / 180)}% 
+                  clipPath: `polygon(50% 50%,
+                    ${50 + 50 * Math.cos((start - 90) * Math.PI / 180)}%
+                    ${50 + 50 * Math.sin((start - 90) * Math.PI / 180)}%,
+                    ${50 + 50 * Math.cos((start + seg - 90) * Math.PI / 180)}%
                     ${50 + 50 * Math.sin((start + seg - 90) * Math.PI / 180)}%)`,
                 }}
               >
                 <div
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                  style={{
-                    transform: `rotate(${start + seg / 2}deg)`,
-                  }}
+                  style={{ transform: `rotate(${start + seg / 2}deg)` }}
                 >
                   <span
                     className="font-bold text-white text-center block"
@@ -141,7 +144,7 @@ export default function SpinningWheel() {
         </div>
 
         {/* center + needle */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-gray-800 rounded-full border-4 border-white shadow-lg z-10"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-gray-800 rounded-full border-4 border-white shadow-lg z-10"></div>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 z-20">
           <div className="w-0 h-0 border-l-4 border-r-4 border-b-8 border-l-transparent border-r-transparent border-b-red-500 drop-shadow-lg"></div>
           <div className="w-2 h-6 bg-red-500 mx-auto rounded-b-full shadow-lg"></div>
@@ -152,17 +155,19 @@ export default function SpinningWheel() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white overflow-hidden relative pt-20">
-      <div className="absolute top-20 left-10 opacity-20">
+      <div className="hidden md:block absolute top-20 left-10 opacity-20">
         <Stars size={32} className="text-yellow-300 animate-pulse" />
       </div>
-      <div className="absolute top-20 right-20 opacity-20">
+      <div className="hidden md:block absolute top-20 right-20 opacity-20">
         <Sparkles size={28} className="text-pink-300 animate-bounce" />
       </div>
-      <div className="absolute bottom-20 left-16 opacity-20">
+      <div className="hidden md:block absolute bottom-20 left-16 opacity-20">
         <Zap size={36} className="text-cyan-300 animate-pulse" />
       </div>
 
-      <header className={`absolute top-6 left-1/2 -translate-x-1/2 sm:left-10 sm:translate-x-0 ${josefin.className}`}>
+      <header
+        className={`absolute top-6 left-1/2 -translate-x-1/2 sm:left-10 sm:translate-x-0 ${josefin.className}`}
+      >
         <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-wider">
           Pickify
         </h1>
@@ -170,31 +175,31 @@ export default function SpinningWheel() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
             Spinning Wheel Decision
           </h1>
-          <p className="text-xl text-gray-300">
+          <p className="text-base sm:text-lg text-gray-300">
             Spin to make your choice from multiple options
           </p>
         </div>
 
-        <div className="flex flex-col xl:flex-row gap-8 items-start justify-center max-w-7xl mx-auto pt-20">
+        <div className="flex flex-col xl:flex-row gap-8 items-start justify-center max-w-7xl mx-auto pt-10 sm:pt-20">
           {/* options editor */}
           <div className="xl:w-1/3 w-full">
-            <div className="bg-white/10 rounded-2xl p-6 border border-white/20 sticky top-8">
-              <div className="flex justify-between mb-6">
-                <h3 className="text-xl font-semibold text-yellow-400">
+            <div className="bg-white/10 rounded-2xl p-4 sm:p-6 border border-white/20 xl:sticky xl:top-8">
+              <div className="flex justify-between mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-yellow-400">
                   Manage Options
                 </h3>
                 <button
                   onClick={addOption}
-                  className="px-4 py-2 bg-green-500 rounded hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed"
+                  className="px-3 sm:px-4 py-2 bg-green-500 rounded hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed"
                   disabled={options.length >= 12}
                 >
                   <Plus size={16} />
                 </button>
               </div>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
+              <div className="space-y-3 max-h-72 sm:max-h-96 overflow-y-auto">
                 {options.map((o, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <span className="text-sm text-gray-400 w-6">{i + 1}.</span>
@@ -218,11 +223,11 @@ export default function SpinningWheel() {
           </div>
 
           <div className="xl:w-1/3 w-full flex flex-col items-center">
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
               {availableOptions.length > 0 ? (
                 renderWheel()
               ) : (
-                <div className="w-80 h-80 rounded-full bg-gray-700 flex items-center justify-center">
+                <div className="w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-gray-700 flex items-center justify-center">
                   No options
                 </div>
               )}
@@ -230,24 +235,24 @@ export default function SpinningWheel() {
 
             {currentResult && (
               <div className="mb-6 text-center">
-                <div className="bg-green-400 text-green-900 px-8 py-4 rounded-full font-bold text-xl shadow-lg animate-pulse">
+                <div className="bg-green-400 text-green-900 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-lg sm:text-xl shadow-lg animate-pulse">
                   🎉 {currentResult}
                 </div>
               </div>
             )}
 
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4 justify-center">
               <button
                 onClick={spinWheel}
                 disabled={isSpinning || availableOptions.length === 0}
-                className="px-8 py-4 rounded-full font-bold text-lg bg-yellow-400 text-yellow-900 hover:bg-yellow-300 disabled:bg-gray-600"
+                className="px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg bg-yellow-400 text-yellow-900 hover:bg-yellow-300 disabled:bg-gray-600"
               >
                 {isSpinning ? "🌀 Spinning..." : "🎯 SPIN"}
               </button>
               {selectedOptions.length > 0 && (
                 <button
                   onClick={resetWheel}
-                  className="px-6 py-4 rounded-full bg-white/20 border"
+                  className="px-4 sm:px-6 py-3 sm:py-4 rounded-full bg-white/20 border"
                 >
                   <RotateCcw size={20} />
                 </button>
@@ -256,8 +261,8 @@ export default function SpinningWheel() {
           </div>
 
           <div className="xl:w-1/3 w-full">
-            <div className="bg-white/10 rounded-2xl p-6 border border-white/20 sticky top-8">
-              <h3 className="text-xl font-semibold mb-6 text-cyan-400">
+            <div className="bg-white/10 rounded-2xl p-4 sm:p-6 border border-white/20 xl:sticky xl:top-8">
+              <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-cyan-400">
                 Selected Options
               </h3>
               {selectedOptions.length === 0 ? (
